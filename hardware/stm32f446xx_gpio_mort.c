@@ -34,16 +34,22 @@
 #define PORTB_PUPDR_REGISTER  (PORTB_BASE_ADDRESS + 0x0C)
 #define PORTB_ODR_REGISTER    (PORTB_BASE_ADDRESS + 0x14)
 
+// Note 1.3
+#define PORTB_AFR1_REGISTER (PORTB_BASE_ADDRESS + 0x20)
+
 
 //Port C addresses: //Fill the table of Port C addresses
 //#define PORTC_BASE_ADDRESS ((uint32_t)0x40020800)
 #define PORTC_BASE_ADDRESS		GPIOC_BASE_MORT
 
-// NOTE 1.2
+//NOTE 1.2
 #define PORTC_MODER_REGISTER  (PORTC_BASE_ADDRESS + 0x00)
 #define PORTC_OTYPER_REGISTER (PORTC_BASE_ADDRESS + 0x04)
 #define PORTC_PUPDR_REGISTER  (PORTC_BASE_ADDRESS + 0x0C)
 #define PORTC_IDR_REGISTER    (PORTC_BASE_ADDRESS + 0x10)
+
+//NOTE 1.4
+#define PORTC_AFR1_REGISTER (PORTC_BASE_ADDRESS + 0x20)
 
 
 //Port D addresses: //These are needed for communication do not edit
@@ -280,8 +286,8 @@ void initGpioB0AsOutput( void )
     
     /* GPIOB0 driven high to start out with */
     setGPIOB0();
-    
 }
+
 /**
   * @brief  Initializes GPIO C6 to be an input
   * @note   EDIT this function!
@@ -357,6 +363,91 @@ void initGpioD8D9AsAF7( void )
     //*reg_pointer = *reg_pointer | GPIO_8_ODR_HIGH | GPIO_9_ODR_HIGH;
 
 }
+
+
+//NOTE 1.3 seems like I have to create new functions since there is no place holder
+void initGpioB0asAF2( void )
+{
+
+  volatile uint32_t* reg_pointer;
+
+  /* GPIOB Peripheral clock enable */
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
+
+  /* GPIOB0 configuring mode */
+  //config PB0 mode as alternate function. Connect PB0 internally to some function
+  reg_pointer = (volatile uint32_t*) PORTB_MODER_REGISTER; 
+  *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_0_MODER);
+  *reg_pointer = *reg_pointer | (uint32_t)GPIO_0_MODER_AF;
+
+  /*GPIOB0 configured as push-pull */
+    reg_pointer = (volatile uint32_t*) PORTB_OTYPER_REGISTER;
+    *reg_pointer = *reg_pointer & ~((uint32_t) GPIO_0_OTYPER);       
+    *reg_pointer = *reg_pointer | (uint32_t) GPIO_0_OTYPER_PP;
+
+  /*GPIOB0 configured floating */
+    // PB0 configured with no pull-up or pull-down. 
+    reg_pointer = (volatile uint32_t*) PORTB_PUPDR_REGISTER;         
+    *reg_pointer = *reg_pointer & ~((uint32_t) GPIO_0_PUPDR);       
+    *reg_pointer = *reg_pointer | (uint32_t) GPIO_0_PUPDR_NOPULL;    
+
+  //configure to connect to timer 3 channel 3
+  //config alternate function to be alternate function 2 == timer 3 channel 3
+  //PB0’s output is now internally connected to the timer 3 channel 3 output
+    reg_pointer = (volatile uint32_t*) PORTB_AFR1_REGISTER;         
+    *reg_pointer = *reg_pointer & ~((uint32_t) GPIO_0_AFR1);       
+    *reg_pointer = *reg_pointer | (uint32_t) GPIO_0_AFR1_AF2;  
+
+
+}
+
+
+// NOTE 1.4: Connect PC6 to Timer 3 channel 1.
+void initGpioC6asAF2(void)
+{
+  volatile uint32_t * reg_pointer;
+
+  // Enable GPIOC's peripheral clock.
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+
+  // Configure PC6 as alternate function: MODER bits 13:12 = 0b10.
+  reg_pointer = (volatile uint32_t*) PORTC_MODER_REGISTER;
+  *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_6_MODER);
+  *reg_pointer = *reg_pointer | (uint32_t)GPIO_6_MODER_AF;
+
+  // Configure PC6 with pull-down: PUPDR bits 13:12 = 0b10.
+  // This keeps PC6 LOW when nothing drives the input.
+  reg_pointer = (volatile uint32_t*) PORTC_PUPDR_REGISTER;
+  *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_6_PUPDR);
+  *reg_pointer = *reg_pointer | (uint32_t)GPIO_6_PUPDR_PD;
+
+  // Select AF2: AFR1 bits 27:24 = 0010.
+  // Connect PC6 internally to Timer 3 channel 1's input (connect to AF2).
+  reg_pointer = (volatile uint32_t*) PORTC_AFR1_REGISTER;
+  *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_6_AFR1);
+  *reg_pointer = *reg_pointer | (uint32_t)GPIO_6_AFR1_AF2;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* hardware actions */
 
@@ -464,6 +555,18 @@ uint32_t checkGPIOC6(void)
   */
 void setGPIOB0_withC6( void )
 {
-    
+    // NOTE 1.2: Read PC6. If high, set PB0 high; otherwise, set PB0 low.
+    if(checkGPIOC6() == 1){
+        setGPIOB0();
+    }
+    else{
+        clearGPIOB0();
+    }
 }
+
+
+
+
+
+
 //EOF

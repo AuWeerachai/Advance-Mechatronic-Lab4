@@ -14,6 +14,12 @@
 
 /*Function definitions--------------------------------------------------------*/
 
+//NOTE 1.6
+void enableTimer3Interrupt(void);
+
+//NOTE 1.7
+void initPC6Interrupt(void);
+
 
 
 #endif /*__STM32F446XX_INTERRUPTCONTROLLER_MORT_H_*/

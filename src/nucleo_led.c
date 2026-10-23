@@ -11,6 +11,9 @@
 #include "stm32f446xx_gpio_mort.h"
 #include "nucleo_led.h"
 
+//NOTE 1.3
+#include "stm32f446xx_timer_mort.h"
+
 /************************************
 * Initializes LED1 on the nucleo Board which is connected to Port B Pin 0
 *************************************/
@@ -48,13 +51,15 @@ void init_Reading(void){
     initGpioC6AsInput();
 }
 
+void turnON_LED1_with_reading(void) {
+    // NOTE 1.2: Use the GPIO function to make LED1 follow PC6.
+    setGPIOB0_withC6();
+}
 
 
-void turnON_LED_with_reading(void) {
-    if(checkGPIOC6() == 1){
-        turnOn_LED1();
-    }
-    else{
-        turnOff_LED1();
-    }
+//NOTE 1.3
+void turnOn_LED1_with_timer(void)
+{
+    initGpioB0asAF2(); // Connect PB0 to Timer 3 channel 3. 
+    initTimer3CH3();      // Configure and start automatic toggling.
 }

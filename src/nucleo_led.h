@@ -18,6 +18,9 @@ void turnOff_LED1(void);
 
 //NOTE 1.2
 void init_Reading(void);
-void turnON_LED_with_reading(void);
+void turnON_LED1_with_reading(void);
+
+//NOTE 1.3
+void turnOn_LED1_with_timer(void);
 
 #endif /*__NUCLEO_LED_H */
