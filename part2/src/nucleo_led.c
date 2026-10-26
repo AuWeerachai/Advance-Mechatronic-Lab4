@@ -23,45 +23,44 @@ void initLEDs(void)
 }
 
 // All drivers are NPN: 1 = ON, 0 = OFF.
-// D2 / PF15.
 void writeRedDetection(uint32_t value)
 {
-    writeGPIOPF15(value);
+    writeGPIOPF15(value); // D2, PF15.
 }
 
-// D3 / PE13.
+
 void writeGreenDetection(uint32_t value)
 {
-    writeGPIOPE13(value);
+    writeGPIOPE13(value); // D3, PE13.
 }
 
-// D4 / PF14.
+
 void writeOrangeDetection(uint32_t value)
 {
-    writeGPIOPF14(value);
+    writeGPIOPF14(value); // D4, PF14.
 }
 
-// D5 / PE11.
+
 void writeWhiteDetection(uint32_t value)
 {
-    writeGPIOPE11(value);
+    writeGPIOPE11(value); // D5, PE11.
 }
 
-// D6 / PE9.
+
 void writeRedIllumination(uint32_t value)
 {
-    writeGPIOPE9(value);
+    writeGPIOPE9(value);  // D6, PE9.
 }
 
-// D7 / PF13.
+
 void writeGreenIllumination(uint32_t value)
 {
-    writeGPIOPF13(value);
+    writeGPIOPF13(value); // D7, PF13.
 }
 
-// D9 / PD15.
+
 void writeBlueIllumination(uint32_t value)
 {
-    writeGPIOPD15(value);
+    writeGPIOPD15(value); // D9, PD15.
 }
 

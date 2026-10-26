@@ -76,7 +76,7 @@
 #define GPIO_11_PUPDR_NOPULL           0x00
 #define GPIO_11_ODR_HIGH               (((uint32_t)0x01)<<11)
 
-// PE13: green detection (D3); PF13: green illumination (D7).
+// PE13: green detection (D3), PF13: green illumination (D7).
 #define GPIO_13_MODER                  (((uint32_t)0x03)<<26)
 #define GPIO_13_MODER_OUT              (((uint32_t)0x01)<<26)
 #define GPIO_13_OTYPER                 (((uint32_t)0x01)<<13)
@@ -94,7 +94,7 @@
 #define GPIO_14_PUPDR_NOPULL           0x00
 #define GPIO_14_ODR_HIGH               (((uint32_t)0x01)<<14)
 
-// PF15: red detection (D2); PD15: blue illumination (D9).
+// PF15: red detection (D2), PD15: blue illumination (D9).
 #define GPIO_15_MODER                  (((uint32_t)0x03)<<30)
 #define GPIO_15_MODER_OUT              (((uint32_t)0x01)<<30)
 #define GPIO_15_OTYPER                 (((uint32_t)0x01)<<15)
