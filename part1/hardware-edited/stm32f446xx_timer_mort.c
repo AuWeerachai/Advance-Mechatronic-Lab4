@@ -97,7 +97,7 @@
 //   // the supplied clock give timer 3 = 90 MHz, we need to slow down
 //   // PSC == use to slow down counitng == set PSC to 8999 so that  90,000,000 / (8999 + 1) == 10000 == 10KHz
 //   // ARR == set when counter restart == set to 4999 so it counts from 0-4999 = 5000 counts == 5000/10000 = 0.5 s (10000 counts/second, set recount to 5000, so 0.5 second)
-  
+//   
 //   //initialize timer -> slow it down -> set repeating loop interval -> set trigger -> set channel as output -> set action when triggered (toggle) 
 //   //-> enable that channel as output -> apply prescale setting + initialize timer -> clear event flags generated during initialize -> start counting
 
@@ -117,7 +117,7 @@
 
 
 //   // SPECIFIC TO CHANNEL 3 BEGIN HERE--------------------------------------------------------
-  
+//   
 //   //When Timer 3's counter reaches 4999, channel 3 of timer 3 got trigger
 //   //like setting a trigger point
 //   reg_pointer = (volatile uint32_t*) TIMER3_CCR3_REGISTER;
@@ -146,7 +146,7 @@
 //   reg_pointer = (volatile uint32_t*) TIMER3_SR_REGISTER;
 //   *reg_pointer = (uint32_t)0;
 
-  
+//   
 //   // Start counting 
 //   reg_pointer = (volatile uint32_t*) TIMER3_CR1_REGISTER;
 //   *reg_pointer = *reg_pointer | (uint32_t)TIMER3_CR1_COUNTER_ENABLE;
@@ -185,7 +185,7 @@
 
 
 //   // SPECIFIC TO CHANNEL 3 BEGIN HERE--------------------------------------------------------
-  
+//   
 //   // Set the PWM threshold: output goes LOW at count 20000.
 //   // Output goes HIGH again when the counter restarts at 0.
 //   reg_pointer = (volatile uint32_t*) TIMER3_CCR3_REGISTER;
@@ -214,7 +214,7 @@
 //   reg_pointer = (volatile uint32_t*) TIMER3_SR_REGISTER;
 //   *reg_pointer = (uint32_t)0;
 
-  
+//   
 //   // Start counting 
 //   reg_pointer = (volatile uint32_t*) TIMER3_CR1_REGISTER;
 //   *reg_pointer = *reg_pointer | (uint32_t)TIMER3_CR1_COUNTER_ENABLE;

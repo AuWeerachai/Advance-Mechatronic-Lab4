@@ -36,7 +36,7 @@ void delay(volatile int count) {
 int main (void)
 {
     /* Variables*/
-    uint32_t number = 0;
+    // uint32_t number = 0;
     /* Initializations */
     initUSART3(); //always init USART if you want communication!
     init_LED1();
@@ -66,17 +66,17 @@ int main (void)
 
     while(1)
     {
-    	number = number + 1;
+    	// number = number + 1;
         //USART supports a very simple printf function, check its function declaration for learning what it can do.
-        transmitLineUSART3("This board is alive!");
-        printfUSART3("This number keeps increasing: %u \n", number);
+        // transmitLineUSART3("This board is alive!");
+        // printfUSART3("This number keeps increasing: %u \n", number);
 
         //NOTE 1.1
         // delay(800000);
         // toggle_LED1();
 
         //NOTE 1.2
-        // turnON_LED_with_reading();
+        // turnON_LED1_with_reading();
 
 
         // NOTE 1.4: Check for a capture, read the saved count, and print it.
