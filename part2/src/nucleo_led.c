@@ -1,65 +1,67 @@
-/**
-  ******************************************************************************
-  * @file    nucleo_led.c 
-  * @author  
-  * @version 
-  * @date    
-  * @brief   Controls the LED's on the nucleo board
-  ******************************************************************************
-  */
-  
-#include "stm32f446xx_gpio_mort.h"
+// Part 2: named controls for the seven external LEDs.
 #include "nucleo_led.h"
+#include "stm32f446xx_gpio_mort.h"
 
-//NOTE 1.3
-#include "stm32f446xx_timer_mort.h"
-
-/************************************
-* Initializes LED1 on the nucleo Board which is connected to Port B Pin 0
-*************************************/
-void init_LED1(void )
+// Configure the LED pins and start with all LEDs OFF.
+void initLEDs(void)
 {
-    //Fill with gpio function to call to initialize LED1
-    initGpioB0AsOutput();
-    
+    initGpioPF15AsOutput();
+    initGpioPE13AsOutput();
+    initGpioPF14AsOutput();
+    initGpioPE11AsOutput();
+    initGpioPE9AsOutput();
+    initGpioPF13AsOutput();
+    initGpioPD15AsOutput();
 
+    writeRedDetection(0);
+    writeGreenDetection(0);
+    writeOrangeDetection(0);
+    writeWhiteDetection(0);
+    writeRedIllumination(0);
+    writeGreenIllumination(0);
+    writeBlueIllumination(0);
 }
-/************************************
-* Toggles LED1 
-*************************************/
-void toggle_LED1( void )
+
+// All drivers are NPN: 1 = ON, 0 = OFF.
+// D2 / PF15.
+void writeRedDetection(uint32_t value)
 {
-    //Fill with gpio function to call to toggle LED1
-    toggleGPIOB0();
-
+    writeGPIOPF15(value);
 }
 
-//NOTE 1.1 Just add some functions here
-void turnOn_LED1(void)
+// D3 / PE13.
+void writeGreenDetection(uint32_t value)
 {
-    setGPIOB0();
+    writeGPIOPE13(value);
 }
 
-/* Turn LED1 off. */
-void turnOff_LED1(void)
+// D4 / PF14.
+void writeOrangeDetection(uint32_t value)
 {
-    clearGPIOB0();
+    writeGPIOPF14(value);
 }
 
-//NOTE 1.2 add checking PC6
-void init_Reading(void){
-    initGpioC6AsInput();
-}
-
-void turnON_LED1_with_reading(void) {
-    // NOTE 1.2: Use the GPIO function to make LED1 follow PC6.
-    setGPIOB0_withC6();
-}
-
-
-//NOTE 1.3
-void turnOn_LED1_with_timer(void)
+// D5 / PE11.
+void writeWhiteDetection(uint32_t value)
 {
-    initGpioB0asAF2(); // Connect PB0 to Timer 3 channel 3. 
-    initTimer3CH3();      // Configure and start automatic toggling.
+    writeGPIOPE11(value);
 }
+
+// D6 / PE9.
+void writeRedIllumination(uint32_t value)
+{
+    writeGPIOPE9(value);
+}
+
+// D7 / PF13.
+void writeGreenIllumination(uint32_t value)
+{
+    writeGPIOPF13(value);
+}
+
+// D9 / PD15.
+void writeBlueIllumination(uint32_t value)
+{
+    writeGPIOPD15(value);
+}
+

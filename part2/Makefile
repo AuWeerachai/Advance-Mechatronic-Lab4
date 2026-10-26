@@ -16,6 +16,7 @@ LDFLAGS = -T linker.ld -nostdlib
 
 # Explicitly list all your C source files, including their subfolder paths
 C_SOURCES = src/main.c \
+			src/nucleo_led.c \
 			hardware/stm32f446xx_system_mort.c \
 			hardware-edited/stm32f446xx_gpio_mort.c \
 			hardware-edited/stm32f446xx_timer_mort.c \
