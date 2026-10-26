@@ -22,14 +22,12 @@
 // Port E: PE13 = D3 green detection, PE11 = D5 white detection, PE9 = D6 red illumination.
 #define PORTE_BASE_ADDRESS    GPIOE_BASE_MORT
 #define PORTE_MODER_REGISTER  (PORTE_BASE_ADDRESS + 0x00) // Select input/output mode.
-#define PORTE_OTYPER_REGISTER (PORTE_BASE_ADDRESS + 0x04) // Select push-pull/open-drain output.
 #define PORTE_PUPDR_REGISTER  (PORTE_BASE_ADDRESS + 0x0C) // Select pull-up/pull-down/no pull.
 #define PORTE_ODR_REGISTER    (PORTE_BASE_ADDRESS + 0x14) // Set output pins HIGH or LOW.
 
 // Port F: PF15 = D2 red detection, PF14 = D4 orange detection, PF13 = D7 green illumination.
 #define PORTF_BASE_ADDRESS    GPIOF_BASE_MORT
 #define PORTF_MODER_REGISTER  (PORTF_BASE_ADDRESS + 0x00) // Select input/output mode.
-#define PORTF_OTYPER_REGISTER (PORTF_BASE_ADDRESS + 0x04) // Select push-pull/open-drain output.
 #define PORTF_PUPDR_REGISTER  (PORTF_BASE_ADDRESS + 0x0C) // Select pull-up/pull-down/no pull.
 #define PORTF_ODR_REGISTER    (PORTF_BASE_ADDRESS + 0x14) // Set output pins HIGH or LOW.
 
@@ -39,7 +37,7 @@
 #define GPIO_6_MODER                   0x3000
 #define GPIO_6_MODER_IN                0x0000
 #define GPIO_6_PUPDR                   0x3000
-#define GPIO_6_PUPDR_PD                0x2000
+#define GPIO_6_PUPDR_NOPULL            0x0000
 #define GPIO_6_IDR                     0x40
 
 // PD8: USART3 TX.
@@ -53,25 +51,16 @@
 #define GPIO_8_AFR2_SET_ALL            0xF
 #define GPIO_8_AFR2_AF7                0x7
 
-// PD9: USART3 RX; PE9: red illumination (D6).
+// PE9: red illumination (D6).
 #define GPIO_9_MODER                   (uint32_t)(0x03<<18)
 #define GPIO_9_MODER_OUT               (((uint32_t)0x01)<<18)
-#define GPIO_9_MODER_AF                (uint32_t)(0x02<<18)
-#define GPIO_9_OTYPER                  (((uint32_t)0x01)<<9)
-#define GPIO_9_OTYPER_PP               0x00
-#define GPIO_9_OSPEEDR_HIGH_SPEED      (((uint32_t)0x03)<<18)
 #define GPIO_9_PUPDR                   (uint32_t)(0x03<<18)
 #define GPIO_9_PUPDR_NOPULL            0x00
 #define GPIO_9_ODR_HIGH                (((uint32_t)0x01)<<9)
-#define GPIO_9_PUPDR_PU                (uint32_t)(0x01<<18)
-#define GPIO_9_AFR2_SET_ALL            (uint32_t)(0xF<<4)
-#define GPIO_9_AFR2_AF7                (uint32_t)(0x7<<4)
 
 // PE11: white detection LED (D5)
 #define GPIO_11_MODER                  (((uint32_t)0x03)<<22)
 #define GPIO_11_MODER_OUT              (((uint32_t)0x01)<<22)
-#define GPIO_11_OTYPER                 (((uint32_t)0x01)<<11)
-#define GPIO_11_OTYPER_PP              0x00
 #define GPIO_11_PUPDR                  (((uint32_t)0x03)<<22)
 #define GPIO_11_PUPDR_NOPULL           0x00
 #define GPIO_11_ODR_HIGH               (((uint32_t)0x01)<<11)
@@ -79,8 +68,6 @@
 // PE13: green detection (D3), PF13: green illumination (D7).
 #define GPIO_13_MODER                  (((uint32_t)0x03)<<26)
 #define GPIO_13_MODER_OUT              (((uint32_t)0x01)<<26)
-#define GPIO_13_OTYPER                 (((uint32_t)0x01)<<13)
-#define GPIO_13_OTYPER_PP              0x00
 #define GPIO_13_PUPDR                  (((uint32_t)0x03)<<26)
 #define GPIO_13_PUPDR_NOPULL           0x00
 #define GPIO_13_ODR_HIGH               (((uint32_t)0x01)<<13)
@@ -88,8 +75,6 @@
 // PF14: orange detection (D4).
 #define GPIO_14_MODER                  (((uint32_t)0x03)<<28)
 #define GPIO_14_MODER_OUT              (((uint32_t)0x01)<<28)
-#define GPIO_14_OTYPER                 (((uint32_t)0x01)<<14)
-#define GPIO_14_OTYPER_PP              0x00
 #define GPIO_14_PUPDR                  (((uint32_t)0x03)<<28)
 #define GPIO_14_PUPDR_NOPULL           0x00
 #define GPIO_14_ODR_HIGH               (((uint32_t)0x01)<<14)
@@ -97,8 +82,6 @@
 // PF15: red detection (D2), PD15: blue illumination (D9).
 #define GPIO_15_MODER                  (((uint32_t)0x03)<<30)
 #define GPIO_15_MODER_OUT              (((uint32_t)0x01)<<30)
-#define GPIO_15_OTYPER                 (((uint32_t)0x01)<<15)
-#define GPIO_15_OTYPER_PP              0x00
 #define GPIO_15_PUPDR                  (((uint32_t)0x03)<<30)
 #define GPIO_15_PUPDR_NOPULL           0x00
 #define GPIO_15_ODR_HIGH               (((uint32_t)0x01)<<15)
@@ -121,10 +104,10 @@ void initGpioC6AsInput( void )
     *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_6_MODER);
     *reg_pointer = *reg_pointer | (uint32_t)GPIO_6_MODER_IN;
 
-    /*Configure pulled-down*/
+    /* No internal pull: comparator output has an external pull-up to 3.3 V. */
      reg_pointer = (volatile uint32_t *) PORTC_PUPDR_REGISTER;
     *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_6_PUPDR);
-    *reg_pointer = *reg_pointer | (uint32_t)GPIO_6_PUPDR_PD;
+    *reg_pointer = *reg_pointer | (uint32_t)GPIO_6_PUPDR_NOPULL;
     
 }
 
@@ -374,37 +357,35 @@ void writeGPIOPD15(uint32_t value)
 }
 
 
-///////////////////////////////////////////////////////// RX,TX /////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////// TX /////////////////////////////////////////////////////////////
 
-// Configure PD8 and PD9 for USART3 serial communication for SERIAL MONITOR
-void initGpioD8D9AsAF7( void )
+// Configure PD8 as USART3 TX for the serial monitor.
+void initGpioD8AsAF7( void )
 {
-      volatile uint32_t  * reg_pointer;
-      
-      /* GPIOD Peripheral clock enable */
+    volatile uint32_t * reg_pointer;
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-    
-    /* GPIO D 8 and 9 as alternative function */ 
-    reg_pointer = (volatile uint32_t *)PORTD_MODER_REGISTER;
-    *reg_pointer = *reg_pointer & (~((uint32_t)GPIO_8_MODER + (uint32_t)GPIO_9_MODER));
-    *reg_pointer = *reg_pointer | GPIO_8_MODER_AF | GPIO_9_MODER_AF;
-    /* GPIOD pin 8 and 9 push pull -> no, open drain-> No another thing says yes to push pull!*/
-    reg_pointer = (volatile uint32_t *)PORTD_OTYPER_REGISTER;
-    *reg_pointer = *reg_pointer & (~((uint32_t)GPIO_8_OTYPER + (uint32_t)GPIO_9_OTYPER));
-    *reg_pointer = *reg_pointer | GPIO_8_OTYPER_PP | GPIO_9_OTYPER_PP;
-    
-    /* GPIOD pin 8 and 9 as high speed */
-    reg_pointer = (volatile uint32_t *)PORTD_OSPEEDR_REGISTER;
-    *reg_pointer = *reg_pointer | (uint32_t)GPIO_8_OSPEEDR_HIGH_SPEED | (uint32_t)GPIO_9_OSPEEDR_HIGH_SPEED;
-    
-    /* GPIOD pin 8 and 9 pulled up */
-    reg_pointer = (volatile uint32_t *)PORTD_PUPDR_REGISTER;
-    *reg_pointer = *reg_pointer & (~((uint32_t)GPIO_8_PUPDR + (uint32_t)GPIO_9_PUPDR));
-    *reg_pointer = *reg_pointer | (uint32_t)GPIO_8_PUPDR_PU | (uint32_t)GPIO_9_PUPDR_PU;
-    
-     /*GPIO D 8 and 9 as alternative function 7*/   
-     reg_pointer = (volatile uint32_t *)PORTD_AFR2_REGISTER;
-    *reg_pointer = *reg_pointer & (~((uint32_t)GPIO_8_AFR2_SET_ALL	+ (uint32_t)GPIO_9_AFR2_SET_ALL));
-    *reg_pointer = *reg_pointer | (uint32_t)GPIO_8_AFR2_AF7 | (uint32_t)GPIO_9_AFR2_AF7;    
-}
 
+    // Alternate function mode.
+    reg_pointer = (volatile uint32_t*) PORTD_MODER_REGISTER;
+    *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_8_MODER);
+    *reg_pointer = *reg_pointer | (uint32_t)GPIO_8_MODER_AF;
+
+    // Push-pull output.
+    reg_pointer = (volatile uint32_t*) PORTD_OTYPER_REGISTER;
+    *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_8_OTYPER);
+    *reg_pointer = *reg_pointer | (uint32_t)GPIO_8_OTYPER_PP;
+
+    // High speed.
+    reg_pointer = (volatile uint32_t*) PORTD_OSPEEDR_REGISTER;
+    *reg_pointer = *reg_pointer | (uint32_t)GPIO_8_OSPEEDR_HIGH_SPEED;
+
+    // Pull-up.
+    reg_pointer = (volatile uint32_t*) PORTD_PUPDR_REGISTER;
+    *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_8_PUPDR);
+    *reg_pointer = *reg_pointer | (uint32_t)GPIO_8_PUPDR_PU;
+
+    // AF7 connects PD8 to USART3 TX.
+    reg_pointer = (volatile uint32_t*) PORTD_AFR2_REGISTER;
+    *reg_pointer = *reg_pointer & ~((uint32_t)GPIO_8_AFR2_SET_ALL);
+    *reg_pointer = *reg_pointer | (uint32_t)GPIO_8_AFR2_AF7;
+}

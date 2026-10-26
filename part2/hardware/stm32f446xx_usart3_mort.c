@@ -41,8 +41,8 @@ void initUSART3(void)
 {
     volatile uint16_t *reg_pointer;
 	
-    /*init PD8 and PD9 as alternate function mode*/
-    initGpioD8D9AsAF7();
+    /*Configure PD8 for USART3 TX*/
+    initGpioD8AsAF7();
     
     /* USART3 Peripheral clock enable */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
@@ -63,16 +63,12 @@ void initUSART3(void)
     //*reg_uart_brr = 0x30D;
     //*reg_uart_brr = 0x008B;
     
-    /*  Write to USART CR1 (Configures Word Length, Parity, TE, RE) */
-    /*Bit 3 = TE (Tx Enable), Bit 2 = RE (Rx Enable)*/
-    /* Note: We do NOT set bit 13 (UE) here! */
+    // Enable transmission only; receiving is not used.
     reg_pointer = (volatile uint16_t *)USART3_CR1;
-    *reg_pointer |= (uint16_t)((1 << 3) | (1 << 2)); // Enable Transmitter (TE) and Receiver (RE)
+    *reg_pointer = *reg_pointer | (uint16_t)(1 << 3);
 
-
-    /*  Enable the USART peripheral, Transmitter, and Receiver */
-    /* Bit 13 = UE (USART Enable) */
-    *reg_pointer |= (uint16_t)(1 << 13); 
+    // Enable USART3.
+    *reg_pointer = *reg_pointer | (uint16_t)(1 << 13);
 }
 /**
   * @brief  Transmits one char
@@ -91,36 +87,6 @@ void transmitCharUSART3(char c)
     /* Drop the character directly into the physical shift data container */
     *reg_uart_dr = (c & 0xFF);
 }
-/**
-  * @brief  Receives one char
-  * @note   Just one char with no terminating character.
-  * @param  None
-  * @retval char c : the character it received
-  */
-char receiveCharUSART3(void)
-{
-	volatile uint32_t *reg_uart_sr = (volatile uint32_t *)USART3_SR;
-    volatile uint32_t *reg_uart_dr = (volatile uint32_t *)USART3_DR;
-
-    /* Poll status register Bit 5 (RXNE: Read Data Register Not Empty) until it becomes 1 */
-    while (((*reg_uart_sr) & (1 << 5)) == 0);
-
-    /* Pull the raw character out of the internal wire queue buffer */
-    return (char)(*reg_uart_dr & 0xFF);
-}
-/**
-  * @brief  Returns the value of the USART3 status register
-  * @note   
-  * @param  None
-  * @retval uint16_t : the current flags of the status USART3 register 
-  */
-uint16_t returnStatusRegisterUART3(void)
-{
-	volatile uint16_t *reg_uart_sr = (volatile uint16_t *)USART3_SR;
-	return *reg_uart_sr;
-}
-
-
 /**
   * @brief  Transmits a string using USART3
   * @note   waits until the terminating character of a string to stop transmitting

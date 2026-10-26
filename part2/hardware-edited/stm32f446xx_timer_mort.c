@@ -16,7 +16,7 @@
 /* MACRO definitions----------------------------------------------------------*/
 
 // REGISTER ADDRESSES:
-// Timer 3: internal counter for the 0.1-second waiting period.
+// Timer 3: internal counter for the 0.2-second waiting period.
 #define TIMER3_BASE_ADDRESS  ((uint32_t)0x40000400)
 #define TIMER3_PSC_REGISTER  (TIMER3_BASE_ADDRESS + 0x28) // Prescaler: controls counting speed.
 #define TIMER3_ARR_REGISTER  (TIMER3_BASE_ADDRESS + 0x2C) // Auto-reload: counter's maximum value.
@@ -36,7 +36,7 @@
 #define TIMER3_SR_OVERFLOW_FLAG_MASK     0x01 // Bit 0: update flag; set on overflow from ARR to 0, or by a generated update.
 
 // Period of timer
-#define PERIOD                           (uint32_t)4999 // (999 + 1) counts × 0.1 ms = 0.1 s.
+#define PERIOD                           (uint32_t)1999 // (1999 + 1) counts × 0.1 ms = 0.2 s.
 
 
 /* function definitions-------------------------------------------------------*/
@@ -48,7 +48,7 @@ void initTimer3 (void){
   // make clock like part 1
   // the supplied clock give timer 3 = 90 MHz, we need to slow down
   // PSC == use to slow down counitng == set PSC to 8999 so that  90,000,000 / (8999 + 1) == 10000 == 10KHz
-  // ARR == set when counter restart == FOR EXAMPLE set to 4999 so it counts from 0-4999 = 5000 counts == 5000/10000 = 0.5 s (10000 counts/second, set recount to 5000, so 0.5 second)
+  // ARR == set when counter restarts == 1999 gives 0-1999 = 2000 counts == 2000/10000 = 0.2 second
   
   volatile uint32_t * reg_pointer;
 

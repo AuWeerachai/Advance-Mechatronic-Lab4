@@ -5,7 +5,7 @@
 #include "stm32f446xx_mort.h"
 
 void initGpioC6AsInput(void);
-void initGpioD8D9AsAF7(void);
+void initGpioD8AsAF7(void);
 uint32_t checkGPIOC6(void);
 
 void initGpioPE13AsOutput(void); // D3 / PE13: green detection.

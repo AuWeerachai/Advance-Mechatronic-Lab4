@@ -16,9 +16,7 @@
 void initUSART3(void);
 
 void transmitCharUSART3(char c);
-char receiveCharUSART3(void);
 
-uint16_t returnStatusRegisterUART3(void);
 
 //wrappers:
 void transmitStringUSART3(const char *s);
