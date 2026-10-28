@@ -91,7 +91,7 @@
 
 // NOTE 1.3 timer toggles output on compare matches. (flip output at match)
 // void initTimer3CH3 (void){
-
+// 
 //   //step
 //   // we need 0.5 second clock 
 //   // the supplied clock give timer 3 = 90 MHz, we need to slow down
@@ -100,52 +100,52 @@
 //   
 //   //initialize timer -> slow it down -> set repeating loop interval -> set trigger -> set channel as output -> set action when triggered (toggle) 
 //   //-> enable that channel as output -> apply prescale setting + initialize timer -> clear event flags generated during initialize -> start counting
-
+// 
 //   volatile uint32_t * reg_pointer;
-
+// 
 //   //initialize timer that is reference
 //   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
-
+// 
 //   //PSC
 //   reg_pointer = (volatile uint32_t *) TIMER3_PSC_REGISTER;
 //   *reg_pointer = 8999;
-
+// 
 //   //ARR
 //   // We need the timer counter to repeat every 0.5 seconds.
 //   reg_pointer = (volatile uint32_t*) TIMER3_ARR_REGISTER;
 //   *reg_pointer = (uint32_t)4999;
-
-
+// 
+// 
 //   // SPECIFIC TO CHANNEL 3 BEGIN HERE--------------------------------------------------------
 //   
 //   //When Timer 3's counter reaches 4999, channel 3 of timer 3 got trigger
 //   //like setting a trigger point
 //   reg_pointer = (volatile uint32_t*) TIMER3_CCR3_REGISTER;
 //   *reg_pointer = (uint32_t)4999;     //select by choice. as long as it's 0.5 seconds apart (which is any number from 0-ARR since we set PSC,ARR already) is fine
-
-
+// 
+// 
 //   //Configure channel 3 of timer 3 as output 
 //   reg_pointer = (volatile uint32_t*) TIMER3_CCMR2_REGISTER;
 //   *reg_pointer = *reg_pointer & ~((uint32_t)TIMER3_CCMR2_CH3_SELECTION_MASK);
 //   // Configure channel 3 to toggle when counter matches CCR3
 //   *reg_pointer = *reg_pointer & ~((uint32_t)TIMER3_CCMR2_CH3_MODE_MASK);
 //   *reg_pointer = *reg_pointer | (uint32_t)TIMER3_CCMR2_CH3_MODE_TOGGLE;
-
-
+// 
+// 
 //   // Enable channel 3's output 
 //   reg_pointer = (volatile uint32_t*) TIMER3_CCER_REGISTER;
 //   *reg_pointer = *reg_pointer | (uint32_t)TIMER3_CCER_CH3_ENABLE;
-
-
+// 
+// 
 //   // Apply the prescaler setting and initialize the counter 
 //   reg_pointer = (volatile uint32_t*) TIMER3_EGR_REGISTER;
 //   *reg_pointer = (uint32_t)TIMER3_EGR_UPDATE_GENERATE;
-
-
+// 
+// 
 //   // Clear event flags generated during initialization 
 //   reg_pointer = (volatile uint32_t*) TIMER3_SR_REGISTER;
 //   *reg_pointer = (uint32_t)0;
-
+// 
 //   
 //   // Start counting 
 //   reg_pointer = (volatile uint32_t*) TIMER3_CR1_REGISTER;
@@ -159,61 +159,61 @@
 
 // // NOTE 1.5   Timer drives output using PWM. (set output low/high)
 // void initTimer3CH3 (void){
-
+// 
 //   // Timer 3 receives a 90 MHz clock.
 //   // PSC = 8999: 90,000,000 / (8999 + 1) = 10,000 counts per second.
 //   // ARR = 39999: counts 0-39999, giving 40,000 counts = 4 seconds per cycle.
 //   // CCR3 = 20000: PWM output is HIGH for counts 0-19999 and LOW for 20000-39999.
 //   // This gives 2 seconds ON and 2 seconds OFF: 50% duty cycle at 0.25 Hz.
-
+// 
 //   // Enable clock -> set counting speed -> set period -> set duty cycle
 //   // -> select channel 3 output and PWM mode -> enable output
 //   // -> apply settings -> clear event flags -> start counting.
-
+// 
 //   volatile uint32_t * reg_pointer;
-
+// 
 //   // Enable Timer 3's peripheral clock.
 //   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
-
+// 
 //   //PSC
 //   reg_pointer = (volatile uint32_t *) TIMER3_PSC_REGISTER;
 //   *reg_pointer = 8999; //90,000,000 / (8999 + 1) == 10000 == 10KHz = 10,000 counts/second
-
+// 
 //   //ARR
 //   reg_pointer = (volatile uint32_t*) TIMER3_ARR_REGISTER;
 //   *reg_pointer = (uint32_t)39999; // 40,000 counts: counter repeats every 4 seconds.
-
-
+// 
+// 
 //   // SPECIFIC TO CHANNEL 3 BEGIN HERE--------------------------------------------------------
 //   
 //   // Set the PWM threshold: output goes LOW at count 20000.
 //   // Output goes HIGH again when the counter restarts at 0.
 //   reg_pointer = (volatile uint32_t*) TIMER3_CCR3_REGISTER;
 //   *reg_pointer = (uint32_t)20000;  // 20,000 / 40,000 = 50% duty cycle: 2 seconds ON, 2 seconds OFF.
-
-
+// 
+// 
 //   //Configure channel 3 of timer 3 as output 
 //   reg_pointer = (volatile uint32_t*) TIMER3_CCMR2_REGISTER;
 //   *reg_pointer = *reg_pointer & ~((uint32_t)TIMER3_CCMR2_CH3_SELECTION_MASK);
 //   // Configure channel 3 to PWM for Question 1.5
 //   *reg_pointer = *reg_pointer & ~((uint32_t)TIMER3_CCMR2_CH3_MODE_MASK);
 //   *reg_pointer = *reg_pointer | (uint32_t)TIMER3_CCMR2_CH3_MODE_PWM1;
-
-
+// 
+// 
 //   // Enable channel 3's output 
 //   reg_pointer = (volatile uint32_t*) TIMER3_CCER_REGISTER;
 //   *reg_pointer = *reg_pointer | (uint32_t)TIMER3_CCER_CH3_ENABLE;
-
-
+// 
+// 
 //   // Apply the prescaler setting and initialize the counter 
 //   reg_pointer = (volatile uint32_t*) TIMER3_EGR_REGISTER;
 //   *reg_pointer = (uint32_t)TIMER3_EGR_UPDATE_GENERATE;
-
-
+// 
+// 
 //   // Clear event flags generated during initialization 
 //   reg_pointer = (volatile uint32_t*) TIMER3_SR_REGISTER;
 //   *reg_pointer = (uint32_t)0;
-
+// 
 //   
 //   // Start counting 
 //   reg_pointer = (volatile uint32_t*) TIMER3_CR1_REGISTER;

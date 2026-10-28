@@ -61,5 +61,5 @@ void turnON_LED1_with_reading(void) {
 void turnOn_LED1_with_timer(void)
 {
     initGpioB0asAF2(); // Connect PB0 to Timer 3 channel 3. 
-    initTimer3CH3();      // Configure and start automatic toggling.
+    initTimer3CH3();      // Configure and start PWM for Part 1.5.
 }

@@ -60,8 +60,8 @@ int main (void)
     // initTimer3CH3();
 
     // NOTE 1.7
-    initGpioC6AsInput(); // Configure PC6 as a normal input with pull-down.
-    initPC6Interrupt(); // Enable rising-edge interrupts from PC6.
+    // initGpioC6AsInput(); // Configure PC6 as a normal input with pull-down.
+    // initPC6Interrupt(); // Enable rising-edge interrupts from PC6.
     
 
     while(1)
@@ -72,8 +72,8 @@ int main (void)
         // printfUSART3("This number keeps increasing: %u \n", number);
 
         //NOTE 1.1
-        // delay(800000);
-        // toggle_LED1();
+        delay(800000);
+        toggle_LED1();
 
         //NOTE 1.2
         // turnON_LED1_with_reading();
